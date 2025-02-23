@@ -109,9 +109,18 @@ const PostCard = ({post, showSubreddit=false, expandedView=false}: PostCardProps
     const {user} = useUser();
     const ownedByCurrentUser = post.author?.username === user?.username;
 
+    const deletePost = useMutation(api.post.deletePost);
+    
     const handleComment = () => {}
 
-    const handleDelete = async () => {}
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you would like to delete this?")) {
+            await deletePost({id: post._id})
+            if (expandedView) {
+                navigate("/");
+            }
+        }
+    }
 
     const handleSubmitComment = (content: string) => {}
 
