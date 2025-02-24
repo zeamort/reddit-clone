@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+# Reddit Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal Reddit clone built with React and TypeScript, using Clerk for authentication and Convex for the backend.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Create communities and posts  
+- Upload images to posts  
+- Comment on posts  
+- View posts by user  
+- Search for communities or posts within a community  
+- Upvote and downvote posts
 
-## Expanding the ESLint configuration
+## Setup & Run
+You'll need to register with [Clerk](https://clerk.com/) and [Convex](https://convex.dev/) to obtain API keys.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Install dependencies:
+    ```sh
+    npm install
+    ```
 
-- Configure the top-level `parserOptions` property like this:
+2. Create a .env.local file at the root directory and add the following:
+    ```sh
+    CONVEX_DEPLOYMENT=
+    VITE_CONVEX_URL=
+    VITE_CLERK_PUBLISHABLE_KEY=
+    CLERK_ISSUER_URL=
+    ```
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+3. Start the Convex Backend
+    ```sh
+    npx convex dev
+    ```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+4. Start the frontend
+    ```sh
+    npm run dev
+    ```
