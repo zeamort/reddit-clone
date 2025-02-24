@@ -1,6 +1,7 @@
 import { internalMutation, query, QueryCtx } from "./_generated/server";
 import { UserJSON } from "@clerk/backend";
 import { v, Validator } from "convex/values";
+import { counts, postCountKey } from "./counter";
 
 export const current = query({
   args: {},
@@ -13,7 +14,7 @@ export const upsertFromClerk = internalMutation({
   args: { data: v.any() as Validator<UserJSON> }, // no runtime validation, trust Clerk
   async handler(ctx, { data }) {
     const userAttributes = {
-      username: `${data.first_name} ${data.last_name}`,
+      username: data.username || "",
       externalId: data.id,
     };
 
@@ -61,3 +62,20 @@ async function userByExternalId(ctx: QueryCtx, externalId: string) {
     .withIndex("byExternalId", (q) => q.eq("externalId", externalId))
     .unique();
 }
+
+export const getPublicUser = query({
+  args: {username: v.string()},
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("byUsername", (q) => q.eq("username", args.username))
+      .unique();
+    
+    if (!user) return {posts: 0};
+
+    const postCount = await counts.count(ctx, postCountKey(user._id));
+    return {
+      posts: postCount
+    };
+  }
+})
